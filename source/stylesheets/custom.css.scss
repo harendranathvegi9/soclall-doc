@@ -1,0 +1,8 @@
+.content .expand_table {
+	display: none;
+}
+
+.content .expand_table+table {
+	margin-right: 0% !important;
+	background-color: #eaf2f6;
+}

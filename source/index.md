@@ -46,6 +46,7 @@ If you get an error about permissions and are on Linux, Mac OS X, or another fla
 
 ```php
 <?php
+// Register app id and secret key
 $soclall = new SoclAll('app_id', 'secret_key');
 ?>
 ```
@@ -57,17 +58,22 @@ Clone with git
 # Authentication
 
 ```javascript
-// Return login url
-soclall.getLoginUrl('network', 'callback_url');
+// Get login url
+var login_url = soclall.getLoginUrl('network', 'callback_url');
+// Redirect user to login url
+res.redirect(login_url);
 ```
 
 ```php
 <?php
-$soclall->getLoginUrl('network', 'callback_url');
+// Get login url
+$login_url = $soclall->getLoginUrl('network', 'callback_url');
+// Redirect user to login url
+header('Location: '.$login_url);
 ?>
 ```
 
-Before you can access users's information. Redirect users to login url and they can verify the permission.
+Let user login and authenticate with your application.
 
 ### HTTP REQUEST
 
@@ -81,17 +87,20 @@ app_id | | Your application's id.
 network | [network](#networks) | Network user want to connect.
 callback | | Callback url will receive user's `token`.
 
+<aside class="success">After user accepts all permission and allow to access. An access `token` will be submitted to your callback.</aside>
+
 # API
 
 ## Get User
 
 ```javascript
-// User object returns in callback function
+// An user object returns in callback function
 soclall.getUser('token', function(err, user){});
 ```
 
 ```php
 <?php
+// Get user object
 $user = $soclall->getUser('token');
 ?>
 ```
@@ -138,11 +147,13 @@ token |  | User's token
 ## Get Friends
 
 ```javascript
+// An array of user returns in callback function
 soclall.getFriends('token', function(err, friends){});
 ```
 
 ```php
-<?php 
+<?php
+// Get friend list
 $friends = $soclall->getFriends('token');
 ?>
 ```
@@ -182,11 +193,13 @@ token |  | User's token
 ## Send Message
 
 ```javascript
+// Send a message to friends
 soclall.sendMessage('token', 'message', friend_ids, ['title',] function(err){});
 ```
 
 ```php
 <?php
+// Send a message to friends
 $soclall->sendMessage('token', 'message', $friend_ids, $title = '');
 ?>
 ```
@@ -215,11 +228,13 @@ title | | [optional] Title for LinkedIn and Tumblr
 ## Publish
 
 ```javascript
+// Publish a message to wall/timeline/stream
 soclall.postStream('token', 'message', function(err){});
 ```
 
 ```php
 <?php
+// Publish a message to wall/timeline/stream
 $soclall->postStream('token', 'message');
 ?>
 ```
