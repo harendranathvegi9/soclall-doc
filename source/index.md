@@ -2,155 +2,253 @@
 title: SoclAll API Reference
 
 language_tabs:
-  - HTTP 1.1
-  - node.js
+  - javascript
   - php
 
 toc_footers:
-  - <a href='http://www.soclall.com/register'>Sign Up for a Developer Key</a>
-  - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
-
-includes:
-  - errors
+  - <a target="_blank" href='http://www.soclall.com/register'>Sign Up to access SoclAll API</a>
+  - <a target="_blank" href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 search: true
 ---
 
-# Introduction
+# SoclAll
 
 Welcome to the SoclAll API! You can use our API to access SoclAll API endpoints, which can get connect your user to their social network accounts
 
-# Get an application
+Go to <a target='_blank' href='https://www.soclall.com'>SoclAll</a> and register an application for your website to get the app id and secret key
 
-Go to <a target='_blank' href='https://www.soclall.com'>SoclAll</a> and register an application for your website.
+### Settings
+Name | Description | Example
+--------- | ---------------- | ----------
+domain | Your site's domain | domain.com
 
-To get the app_id and secret_key
+# Installation
 
+## Node.js
+
+```javascript
+// Register app id and secret key
+var SoclAll = require('soclall-api')
+  , soclall = new SoclAll('app_id', 'secret_key');
+```
+
+Install from npm
+
+`npm install soclall-api --save`
+
+<aside class="notice">
+If you get an error about permissions and are on Linux, Mac OS X, or another flavour of Unix, you may need to use <code class="prettyprint">sudo</code>:<br/>
+<code class="prettyprint">sudo npm install soclall-api --save</code>
+</aside>
+
+## PHP
+
+```php
+<?php
+$soclall = new SoclAll('app_id', 'secret_key');
+?>
+```
+
+Clone with git
+
+[https://github.com/sandklock/soclall-api-php](https://github.com/sandklock/soclall-api-php)
 
 # Authentication
 
-> To get login url, use this code:
-
-```node.js
-code nodejs here
+```javascript
+// Return login url
+soclall.getLoginUrl('network', 'callback_url');
 ```
 
 ```php
-code php here
+<?php
+$soclall->getLoginUrl('network', 'callback_url');
+?>
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+Before you can access users's information. Redirect users to login url and they can verify the permission.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+### HTTP REQUEST
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+`REDIRECT https://api.soclall.com/login`
 
-`Authorization: meowmeowmeow`
+### Query Parameters
 
-<aside class="notice">
-You must replace `meowmeowmeow` with your personal API key.
-</aside>
+Parameter | Value | Description
+--------- | ------- | -----------
+app_id | | Your application's id.
+network | [network](#networks) | Network user want to connect.
+callback | | Callback url will receive user's `token`.
 
-# Kittens
+# API
 
-## Get All Kittens
+## Get User
 
-```node.js
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+```javascript
+// User object returns in callback function
+soclall.getUser('token', function(err, user){});
 ```
 
 ```php
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+<?php
+$user = $soclall->getUser('token');
+?>
 ```
 
-> The above command returns JSON structured like this:
+> The `user` object returns JSON structured like this:
 
-```json
+```python
+{
+  // general
+  "id": 2,
+  "username": "Boy",
+  "email": "boy@soclall.com",
+  // name
+  "full_name": "Boy Nguyen", // full name || first name + lastname
+  "first_name": "Boy",
+  "last_name": "Nguyen",
+  "display_name": "Boy Boy", // Google Plus
+  // profile
+  "profile_url": "http://www.facebook.com/boy",
+  "avatar_url": "",
+  "avatar_small_url": "",
+  "avatar_medium_url": "",
+  "avatar_big_url": "",
+  "gender": "", // male || female || unknown
+  "date_of_birth": "", // YYYY/MM/DD
+}
+```
+
+This endpoint retrieves user information.
+
+<aside class="warning">The user object does not contain fully information. Missing fields will return with empty string</aside>
+
+### HTTP Request
+
+`GET https://api.soclall.com/service`
+
+### Query Parameters
+
+Parameter | Value | Description
+--------- | ------- | -----------
+method | getuser | Method to get user information
+token |  | User's token
+
+## Get Friends
+
+```javascript
+soclall.getFriends('token', function(err, friends){});
+```
+
+```php
+<?php 
+$friends = $soclall->getFriends('token');
+?>
+```
+
+> The `friends` object returns an array of `user` object like this:
+
+```python
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "id": 2,
+    "username": "Boy",
+    "email": "boy@soclall.com",
+    ...
   },
   {
-    "id": 2,
-    "name": "Isis",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "id": 3,
+    "username": "Girl",
+    "email": "girl@soclall.com",
+    ...
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves user's friends.
 
 ### HTTP Request
 
-`GET http://example.com/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/3"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Isis",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">If you're not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
+`GET https://api.soclall.com/service`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the cat to retrieve
+Parameter | Value | Description
+--------- | ------- | -----------
+method | getfriends | Method to get user's friends
+token |  | User's token
 
+## Send Message
+
+```javascript
+soclall.sendMessage('token', 'message', friend_ids, ['title',] function(err){});
+```
+
+```php
+<?php
+$soclall->sendMessage('token', 'message', $friend_ids, $title = '');
+?>
+```
+
+This endpoint will send `message` to user's friends.
+
+### HTTP Request
+
+`GET https://api.soclall.com/service`
+
+### URL Parameters
+
+Parameter | Value | Description
+--------- | ------- | -----------
+method | sendmessage | Method to send message
+token | | User's token
+message | | Message
+friends | | List friend ids join by comma
+title | | [optional] Title for LinkedIn and Tumblr
+
+<aside class="warning">
+<code class="prettyprint">title</code> is required field for LinkedIn and Tumblr
+</aside>
+
+
+## Publish
+
+```javascript
+soclall.postStream('token', 'message', function(err){});
+```
+
+```php
+<?php
+$soclall->postStream('token', 'message');
+?>
+```
+
+This endpoint will publish a message to user's wall/timeline/stream.
+
+### HTTP Request
+
+`GET https://api.soclall.com/service`
+
+### URL Parameters
+
+Parameter | Value | Description
+--------- | ------- | -----------
+method | poststream | Method to send publish
+token | | User's token
+message | | Message
+
+# Networks
+
+Network | Code | Get User | Get Friends | Send Message | Publish
+--- | --- | :-: | :-: | :-: | :-:
+Facebook | facebook | <i class="success"></i> | <i class="success"></i> | | 
+Twitter | twitter | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
+Google Plus | google | <i class="success"></i> | <i class="success"></i> | | 
+LinkedIn | linkedin | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
+Live | live | <i class="success"></i> | <i class="success"></i> | |
+Plurk | plurk | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
+Tumblr | tumblr | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
+Mail.ru | mailru | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
+Reddit | reddit | <i class="success"></i> | <i class="success"></i> | |
+Last.fm | lastfm | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
