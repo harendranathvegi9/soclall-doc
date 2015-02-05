@@ -249,7 +249,7 @@ This endpoint will publish a message to user's wall/timeline/stream.
 
 Parameter | Value | Description
 --------- | ------- | -----------
-method | poststream | Method to send publish
+method | poststream | Method to publish
 token | | User's token
 message | | Message
 
