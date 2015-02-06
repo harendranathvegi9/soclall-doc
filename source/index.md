@@ -85,13 +85,13 @@ Parameter | Value | Description
 --------- | ------- | -----------
 app_id | | Your application's id.
 network | [network](#networks) | Network user want to connect.
-callback | | Callback url will receive user's `token`.
+callback | | Callback url to receive user's `token`.
 
 <aside class="success">After user accepts all permission and allow to access. An access `token` will be submitted to your callback.</aside>
 
 # API
 
-## Get User
+## /user
 
 ```javascript
 // An user object returns in callback function
@@ -131,20 +131,19 @@ $user = $soclall->getUser('token');
 
 This endpoint retrieves user information.
 
-<aside class="warning">The user object does not contain fully information. Missing fields will return with empty string</aside>
+<aside class="notice">The user object does not contain fully information. Missing fields will return with empty string</aside>
 
 ### HTTP Request
 
-`GET https://api.soclall.com/service`
+`GET https://api.soclall.com/user`
 
 ### Query Parameters
 
 Parameter | Value | Description
 --------- | ------- | -----------
-method | getuser | Method to get user information
 token |  | User's token
 
-## Get Friends
+## /friends
 
 ```javascript
 // An array of user returns in callback function
@@ -181,16 +180,15 @@ This endpoint retrieves user's friends.
 
 ### HTTP Request
 
-`GET https://api.soclall.com/service`
+`GET https://api.soclall.com/message`
 
 ### URL Parameters
 
 Parameter | Value | Description
 --------- | ------- | -----------
-method | getfriends | Method to get user's friends
 token |  | User's token
 
-## Send Message
+## /message
 
 ```javascript
 // Send a message to friends
@@ -208,15 +206,14 @@ This endpoint will send `message` to user's friends.
 
 ### HTTP Request
 
-`GET https://api.soclall.com/service`
+`GET https://api.soclall.com/message`
 
 ### URL Parameters
 
 Parameter | Value | Description
 --------- | ------- | -----------
-method | sendmessage | Method to send message
 token | | User's token
-message | | Message
+message | | Message content
 friends | | List friend ids join by comma
 title | | [optional] Title for LinkedIn and Tumblr
 
@@ -225,17 +222,17 @@ title | | [optional] Title for LinkedIn and Tumblr
 </aside>
 
 
-## Publish
+## /publish
 
 ```javascript
 // Publish a message to wall/timeline/stream
-soclall.postStream('token', 'message', function(err){});
+soclall.publish('token', 'message', function(err){});
 ```
 
 ```php
 <?php
 // Publish a message to wall/timeline/stream
-$soclall->postStream('token', 'message');
+$soclall->publish('token', 'message');
 ?>
 ```
 
@@ -243,18 +240,17 @@ This endpoint will publish a message to user's wall/timeline/stream.
 
 ### HTTP Request
 
-`GET https://api.soclall.com/service`
+`GET https://api.soclall.com/publish`
 
 ### URL Parameters
 
 Parameter | Value | Description
 --------- | ------- | -----------
-method | poststream | Method to publish
 token | | User's token
 message | | Message
 
 # Networks
-
+<p class="expand_table"></p>
 Network | Code | Get User | Get Friends | Send Message | Publish
 --- | --- | :-: | :-: | :-: | :-:
 Facebook | facebook | <i class="success"></i> | <i class="success"></i> | | 
