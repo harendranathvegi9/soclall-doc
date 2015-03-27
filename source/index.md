@@ -14,13 +14,13 @@ search: true
 
 # SoclAll
 
-Welcome to the SoclAll API! You can use our API to access SoclAll API endpoints, which can get connect your user to their social network accounts
+Welcome to the SoclAll API! You can use our API to access SoclAll API endpoints, which can get connect your users to their social network accounts
 
 Go to <a target='_blank' href='https://www.soclall.com'>SoclAll</a> and register an application for your website to get the app id and secret key
 
 ### Settings
 Name | Description | Example
---------- | ---------------- | ----------
+--- | --- | ---
 domain | Your site's domain | domain.com
 
 # Installation
@@ -85,7 +85,7 @@ Parameter | Value | Description
 --------- | ------- | -----------
 app_id | | Your application's id.
 network | [network](#networks) | Network user want to connect.
-callback | | Callback url to receive user's `token`.
+callback | | Callback url to retrieve user's `token`.
 
 <aside class="success">After user accepts all permission and allow to access. An access `token` will be submitted to your callback.</aside>
 
@@ -131,8 +131,6 @@ $user = $soclall->getUser('token');
 
 This endpoint retrieves user information.
 
-<aside class="notice">The user object does not contain fully information. Missing fields will return with empty string</aside>
-
 ### HTTP Request
 
 `GET https://api.soclall.com/user`
@@ -142,6 +140,12 @@ This endpoint retrieves user information.
 Parameter | Value | Description
 --------- | ------- | -----------
 token |  | User's token
+
+### Response
+
+Return an `user` object
+
+<aside class="notice">The user object does not contain fully information. Missing fields return with empty string</aside>
 
 ## /friends
 
@@ -180,13 +184,17 @@ This endpoint retrieves user's friends.
 
 ### HTTP Request
 
-`GET https://api.soclall.com/message`
+`GET https://api.soclall.com/friends`
 
 ### URL Parameters
 
 Parameter | Value | Description
 --------- | ------- | -----------
 token |  | User's token
+
+### Response
+
+Return array of `user` objects
 
 ## /message
 
@@ -247,13 +255,13 @@ This endpoint will publish a message to user's wall/timeline/stream.
 Parameter | Value | Description
 --------- | ------- | -----------
 token | | User's token
-message | | Message
+message | | Message 
 
 # Networks
 <p class="expand_table"></p>
-Network | Code | Get User | Get Friends | Send Message | Publish
+Network | Code | /user | /friends | /message | /publish
 --- | --- | :-: | :-: | :-: | :-:
-Facebook | facebook | <i class="success"></i> | <i class="success"></i> | | 
+Facebook | facebook | <i class="success"></i> | <i class="success"></i> | | <i class="success"></i>
 Twitter | twitter | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
 Google Plus | google | <i class="success"></i> | <i class="success"></i> | | 
 LinkedIn | linkedin | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
@@ -263,3 +271,8 @@ Tumblr | tumblr | <i class="success"></i> | <i class="success"></i> | <i class="
 Mail.ru | mailru | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
 Reddit | reddit | <i class="success"></i> | <i class="success"></i> | |
 Last.fm | lastfm | <i class="success"></i> | <i class="success"></i> | <i class="success"></i> | <i class="success"></i>
+Vkontakte | vkontakte | <i class="success"></i> | | | 
+Disqus | disqus | <i class="success"></i> | | |
+Wordpress | wordpress | <i class="success"></i> | | |
+Foursquare | foursquare | <i class="success"></i> | | |
+Github | github | <i class="success"></i> | | |
